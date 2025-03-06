@@ -1,12 +1,11 @@
 import styles from './styles/home.module.css';
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { API_URL } from '../lib/constants';
 
 export const metadata: Metadata = {
   title: 'Home',
 };
-
-export const API_URL = 'https://billions-api.nomadcoders.workers.dev';
 
 async function getBillions() {
   const response = await fetch(API_URL);
