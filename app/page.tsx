@@ -23,7 +23,7 @@ export default async function Home() {
 
         return (
           <div key={p.id} className={styles.billionlist}>
-            <Link href={`/person/${p.id}`}>
+            <Link prefetch href={`/person/${p.id}`}>
               <img src={p.squareImage} alt={p.name} />
             </Link>
             <h3>{p.name}</h3>
