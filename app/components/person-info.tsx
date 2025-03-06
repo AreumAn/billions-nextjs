@@ -1,3 +1,4 @@
+import styles from '../styles/person-info.module.css';
 import { API_URL } from '../page';
 
 async function getPerson(id: string) {
@@ -9,23 +10,33 @@ async function getPerson(id: string) {
 export default async function PersonInfo({ id }: { id: string }) {
   const person = await getPerson(id);
   return (
-    <div>
-      <div>
-        <img src={person.squareImage}></img>
-        <div>{person.name}</div>
-        <div>netWorth: {person.netWorth}</div>
-        <div>country: {person.country}</div>
-        <div>industries: {person.industries}</div>
-        <div>{person.bio}</div>
+    <div className={styles.container}>
+      <div className={styles.profileSection}>
+        <img src={person.squareImage} alt={person.name} />
+        <h1 className={styles.name}>{person.name}</h1>
+        <div className={styles.info}>Networth: ${(person.netWorth / 1000).toFixed(1)} Billion</div>
+        <div className={styles.info}>Country: {person.country}</div>
+        <div className={styles.info}>Industry: {person.industries}</div>
+        <div className={styles.bio}>{person.bio}</div>
       </div>
-      <div>
-        {person.financialAssets.map((a) => (
-          <div>
-            <div>ticker: {a.ticker}</div>
-            <div>numberOfShares: {a.numberOfShares}</div>
-            <div>exerciseOptionPrice: {a.exerciseOptionPrice}</div>
-          </div>
-        ))}
+
+      <div className={styles.financialSection}>
+        <h2 className={styles.financialTitle}>Financial Assets</h2>
+        <div className={styles.assetsGrid}>
+          {person.financialAssets.map((asset, index) => (
+            <div key={index} className={styles.assetCard}>
+              <div className={styles.assetInfo}>Ticker: {asset.ticker}</div>
+              <div className={styles.assetInfo}>
+                Shares: {asset.numberOfShares.toLocaleString()}
+              </div>
+              {asset.exerciseOptionPrice && (
+                <div className={styles.assetInfo}>
+                  Exercise Price: ${asset.exerciseOptionPrice}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
