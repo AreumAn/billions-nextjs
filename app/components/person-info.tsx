@@ -1,5 +1,5 @@
 import styles from '../styles/person-info.module.css';
-import { API_URL } from '../page';
+import { API_URL } from '../../lib/constants';
 
 async function getPerson(id: string) {
   const res = await fetch(`${API_URL}/person/${id}`);
