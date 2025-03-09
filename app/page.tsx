@@ -7,32 +7,48 @@ export const metadata: Metadata = {
   title: 'Home',
 };
 
-async function getBillions() {
+interface Billionaire {
+  id: string;
+  name: string;
+  netWorth: number;
+  squareImage: string;
+  industries: string[];
+}
+
+async function getBillionaires(): Promise<Billionaire[]> {
   const response = await fetch(API_URL);
   const data = await response.json();
   return data;
 }
 
+function BillionaireCard({ billionaire }: { billionaire: Billionaire }) {
+  const netWorthInBillions = (billionaire.netWorth / 1000).toFixed(2);
+  const formattedNetWorth = `$${netWorthInBillions}B`;
+
+  return (
+    <div key={billionaire.id} className={styles.billionlist}>
+      <Link href={`/person/${billionaire.id}`}>
+        <img src={billionaire.squareImage} alt={billionaire.name} />
+      </Link>
+      <h3>{billionaire.name}</h3>
+      <p>
+        {formattedNetWorth} / {billionaire.industries[0]}
+      </p>
+    </div>
+  );
+}
+
 export default async function Home() {
-  const billions = await getBillions();
+  const billionaires = await getBillionaires();
+  
   return (
     <div className={styles.container}>
-      {billions.map((p) => {
-        const netWorthInBillions = (p.netWorth / 1000).toFixed(2);
-        const formattedNetWorth = `$${netWorthInBillions}B`;
-
-        return (
-          <div key={p.id} className={styles.billionlist}>
-            <Link prefetch href={`/person/${p.id}`}>
-              <img src={p.squareImage} alt={p.name} />
-            </Link>
-            <h3>{p.name}</h3>
-            <p>
-              {formattedNetWorth} • {p.industries[0]}
-            </p>
-          </div>
-        );
-      })}
+      {billionaires.map((billionaire) => (
+        <BillionaireCard 
+          key={billionaire.id} 
+          billionaire={billionaire} 
+        />
+      ))}
     </div>
   );
 }
